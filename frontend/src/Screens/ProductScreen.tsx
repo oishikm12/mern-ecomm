@@ -1,16 +1,25 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap'
+import axios from 'axios'
 
 import Rating from '../Components/Rating'
-
-import products from '../products'
 
 import { Prod } from '../Types/common'
 
 const Product: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
-  const product: Prod | undefined = products.find((p) => p._id === match.params.id)
+  const [product, setProduct] = useState<Prod>()
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const res = await axios.get(`/api/products/${match.params.id}`)
+      const data: Prod = res.data
+      setProduct(data)
+    }
+
+    fetchProduct()
+  }, [])
 
   if (product)
     return (
