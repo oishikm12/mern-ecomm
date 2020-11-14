@@ -1,0 +1,36 @@
+{
+  "name": "mern-ecomm",
+  "version": "1.0.0",
+  "description": "MERN ECommerce Website",
+  "keywords": [
+    "E-Commerce",
+    "MERN",
+    "Typescript",
+    "React",
+    "Bootstrap"
+  ],
+  "scripts": {
+    "run": "ts-node ./backend/server.ts",
+    "dev": "nodemon",
+    "build": "tsc build ./backend/server.ts"
+  },
+  "author": "AwEsOmE",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.9",
+    "@typescript-eslint/eslint-plugin": "^4.7.0",
+    "@typescript-eslint/parser": "^4.7.0",
+    "eslint": "^7.13.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-tsdoc": "^0.2.7",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  }
+}
