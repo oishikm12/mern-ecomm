@@ -19,7 +19,7 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
     }
 
     fetchProduct()
-  }, [])
+  }, [match.params.id])
 
   if (product)
     return (
