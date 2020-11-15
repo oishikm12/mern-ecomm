@@ -2,10 +2,9 @@ import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import 'colors'
 
-import products from './data/products'
-import connectDB from './config/db'
+import { default as productRouter } from './routes/productRoutes'
 
-import Prod from './types/Prod'
+import connectDB from './config/db'
 
 dotenv.config()
 
@@ -19,19 +18,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('API is working')
 })
 
-app.get('/api/products', (req: Request, res: Response) => {
-  res.json(products)
-})
-
-app.get('/api/products/:id', (req: Request, res: Response) => {
-  const prod: Prod | undefined = products.find((e) => e._id === req.params.id)
-
-  if (!prod) {
-    res.json({ success: false })
-  } else {
-    res.json(prod)
-  }
-})
+app.use('/api/products', productRouter)
 
 const PORT: string | number = process.env.PORT || 8080
 

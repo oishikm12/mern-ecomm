@@ -1,4 +1,6 @@
-import mongoose, { Schema, Model, Document } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
+
+import { Prod } from 'Models'
 
 const reviewSchema: Schema = new mongoose.Schema(
   {
@@ -30,6 +32,6 @@ const productSchema: Schema = new mongoose.Schema(
   }
 )
 
-const Product: Model<Document> = mongoose.model('Product', productSchema)
+const Product: Model<Prod> = mongoose.model('Product', productSchema)
 
 export default Product

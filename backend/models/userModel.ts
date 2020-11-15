@@ -1,4 +1,6 @@
-import mongoose, { Schema, Model, Document } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
+
+import { Usr } from 'Models'
 
 const userSchema: Schema = new mongoose.Schema(
   {
@@ -12,6 +14,6 @@ const userSchema: Schema = new mongoose.Schema(
   }
 )
 
-const User: Model<Document> = mongoose.model('User', userSchema)
+const User: Model<Usr> = mongoose.model('User', userSchema)
 
 export default User

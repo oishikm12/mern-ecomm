@@ -1,4 +1,6 @@
-import mongoose, { Schema, Model, Document } from 'mongoose'
+import mongoose, { Schema, Model } from 'mongoose'
+
+import { Ord } from 'Models'
 
 const orderSchema: Schema = new mongoose.Schema(
   {
@@ -38,6 +40,6 @@ const orderSchema: Schema = new mongoose.Schema(
   }
 )
 
-const Order: Model<Document> = mongoose.model('User', orderSchema)
+const Order: Model<Ord> = mongoose.model('Order', orderSchema)
 
 export default Order
