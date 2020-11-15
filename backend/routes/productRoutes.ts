@@ -31,7 +31,8 @@ router.get(
     const prod: Prod | null = await Product.findById(req.params.id)
 
     if (!prod) {
-      res.status(400).json({ message: 'Product not found' })
+      res.status(404)
+      throw new Error('Product not found')
     } else {
       res.json(prod)
     }

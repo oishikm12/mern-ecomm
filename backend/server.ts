@@ -4,6 +4,8 @@ import 'colors'
 
 import { default as productRouter } from './routes/productRoutes'
 
+import { notFound, errHandler } from './middleware/errorMiddleware'
+
 import connectDB from './config/db'
 
 dotenv.config()
@@ -19,6 +21,10 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use('/api/products', productRouter)
+
+app.use('*', notFound)
+
+app.use(errHandler)
 
 const PORT: string | number = process.env.PORT || 8080
 
