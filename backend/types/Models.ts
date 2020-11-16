@@ -46,7 +46,7 @@ interface Prod extends Document {
   /** Reviewers count */
   numReviews: number
   /** Reviews detail */
-  reviews: Review
+  reviews: Review[]
 }
 
 type Item = {
