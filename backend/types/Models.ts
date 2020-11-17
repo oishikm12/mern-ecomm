@@ -1,8 +1,6 @@
 import { Document } from 'mongoose'
 
 interface Usr extends Document {
-  /** Unique user ID */
-  _id: string
   /** Name of user */
   name: string
   /** Email of user */
@@ -10,7 +8,9 @@ interface Usr extends Document {
   /** Password set by user */
   password: string
   /** Is the user admin */
-  isAdmin: boolean
+  isAdmin?: boolean
+  /** Decrypt Password */
+  matchPassword(arg0: string): Promise<boolean>
 }
 
 type Review = {
@@ -23,8 +23,6 @@ type Review = {
 }
 
 interface Prod extends Document {
-  /** Unique ID of product */
-  _id: string
   /** Owner of product*/
   user: Usr['_id']
   /** Name of product */
@@ -38,13 +36,13 @@ interface Prod extends Document {
   /** Classification of product  */
   category: string
   /** Current Price of product */
-  price: number
+  price?: number
   /** Current stock */
-  countInStock: number
+  countInStock?: number
   /** Stars of product */
-  rating: number
+  rating?: number
   /** Reviewers count */
-  numReviews: number
+  numReviews?: number
   /** Reviews detail */
   reviews: Review[]
 }
@@ -85,8 +83,6 @@ type Payment = {
 }
 
 interface Ord extends Document {
-  /** Unique order ID */
-  _id: string
   /** User placing the order */
   user: Usr['_id']
   /** Item ordered */
@@ -98,17 +94,17 @@ interface Ord extends Document {
   /** Result of payment */
   paymentResult: Payment
   /** Tax Imposed */
-  taxPrice: number
+  taxPrice?: number
   /** Price to ship */
-  shippingPrice: number
+  shippingPrice?: number
   /** Total amount */
-  totalPrice: number
+  totalPrice?: number
   /** Is success */
-  isPaid: boolean
+  isPaid?: boolean
   /** Paid at if success */
   paidAt: Date
   /** Is delivery success */
-  isDelivered: boolean
+  isDelivered?: boolean
   /** Date of delivery if success */
   deliveredAt: Date
 }

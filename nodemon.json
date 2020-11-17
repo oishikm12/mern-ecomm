@@ -2,5 +2,5 @@
   "watch": ["backend"],
   "ext": "ts, json",
   "ignore": ["backend/**/*.spec.ts"],
-  "exec": "./node_modules/.bin/ts-node ./backend/server.ts"
+  "exec": "./node_modules/.bin/ts-node --files ./backend/server.ts ./backend/server.ts"
 }

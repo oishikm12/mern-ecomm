@@ -1,6 +1,6 @@
 import mongoose, { Schema, Model } from 'mongoose'
 
-import { Ord } from 'Models'
+import { Ord } from '../types/models'
 
 const orderSchema: Schema = new mongoose.Schema(
   {

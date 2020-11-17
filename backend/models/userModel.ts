@@ -1,6 +1,7 @@
-import mongoose, { Schema, Model } from 'mongoose'
+import mongoose, { Schema, Model, HookNextFunction } from 'mongoose'
+import bcrypt from 'bcryptjs'
 
-import { Usr } from 'Models'
+import { Usr } from '../types/models'
 
 const userSchema: Schema = new mongoose.Schema(
   {
@@ -14,6 +15,22 @@ const userSchema: Schema = new mongoose.Schema(
   }
 )
 
+/**
+ * Compares passwords with encryption
+ * @param enteredPassword Password entered
+ */
+userSchema.methods.matchPassword = async function (enteredPassword: string) {
+  return bcrypt.compare(enteredPassword, this.password)
+}
+
+userSchema.pre<Usr>('save', async function (next: HookNextFunction) {
+  if (!this.isModified('password')) {
+    next()
+  }
+
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
+})
 const User: Model<Usr> = mongoose.model('User', userSchema)
 
 export default User

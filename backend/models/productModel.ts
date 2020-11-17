@@ -1,6 +1,6 @@
 import mongoose, { Schema, Model } from 'mongoose'
 
-import { Prod } from 'Models'
+import { Prod } from '../types/models'
 
 const reviewSchema: Schema = new mongoose.Schema(
   {

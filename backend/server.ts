@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import 'colors'
 
 import { default as productRouter } from './routes/productRoutes'
+import { default as userRouter } from './routes/userRoutes'
 
 import { notFound, errHandler } from './middleware/errorMiddleware'
 
@@ -16,11 +17,14 @@ const uri: string = process.env.MONGO_URI || ''
 
 connectDB(uri)
 
+app.use(express.json())
+
 app.get('/', (req: Request, res: Response) => {
   res.send('API is working')
 })
 
 app.use('/api/products', productRouter)
+app.use('/api/users', userRouter)
 
 app.use('*', notFound)
 

@@ -10,7 +10,7 @@ import Order from './models/orderModel'
 
 import connectDB from './config/db'
 
-import { Usr } from './types/Models'
+import { Usr } from './types/models'
 
 dotenv.config()
 
