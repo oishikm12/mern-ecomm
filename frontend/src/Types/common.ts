@@ -33,3 +33,18 @@ export interface Prod {
   /** Reviews detail */
   reviews: Review[]
 }
+
+export interface CartItem {
+  /** Unique ID of product */
+  product?: string
+  /** Name of product */
+  name?: string
+  /** Image of the product */
+  image?: string
+  /** Current Price of product */
+  price?: number
+  /** Current stock */
+  countInStock?: number
+  /** Quantity of item */
+  qty?: number
+}

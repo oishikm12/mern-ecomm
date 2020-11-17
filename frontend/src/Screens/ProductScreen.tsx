@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap'
+import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 
 import Rating from '../Components/Rating'
 import Loader from '../Components/Loader'
@@ -10,9 +10,12 @@ import Message from '../Components/Message'
 
 import { listProductDetail } from '../Actions/productActions'
 
-import { RootState, ProdDetailState } from '../Types/reducers'
+import { ReducerState } from '../store'
+import { ProdDetailState } from '../Types/reducers'
 
-const Product: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
+const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) => {
+  const [qty, setQty] = useState(1)
+
   const dispatch = useDispatch()
 
   /**
@@ -20,12 +23,19 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
    * @param state All global states
    * @return List of products
    */
-  const getProductDetail = (state: RootState): ProdDetailState => {
+  const getProductDetail = (state: ReducerState): ProdDetailState => {
     return state.productDetail
   }
 
   const productDetail = useSelector(getProductDetail)
   const { loading, error, product } = productDetail
+
+  /**
+   * Changes to add to cart
+   */
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${qty}`)
+  }
 
   useEffect(() => {
     dispatch(listProductDetail(match.params.id))
@@ -71,6 +81,7 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
                       </Col>
                     </Row>
                   </ListGroup.Item>
+
                   <ListGroup.Item>
                     <Row>
                       <Col>Status:</Col>
@@ -81,8 +92,31 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
                       </Col>
                     </Row>
                   </ListGroup.Item>
+
+                  {product.countInStock && product.countInStock > 0 ? (
+                    <ListGroup.Item>
+                      <Row>
+                        <Col>Qty:</Col>
+                        <Col>
+                          <Form.Control as="select" value={qty} onChange={(e) => setQty(Number(e.target.value))}>
+                            {[...Array(product.countInStock)].map((x, i: number) => (
+                              <option key={i + 1} value={i + 1}>
+                                {i + 1}
+                              </option>
+                            ))}
+                          </Form.Control>
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ) : null}
+
                   <ListGroup.Item>
-                    <Button className="btn-block" type="button" disabled={product.countInStock === 0}>
+                    <Button
+                      className="btn-block"
+                      type="button"
+                      disabled={product.countInStock === 0}
+                      onClick={addToCartHandler}
+                    >
                       Add to Cart
                     </Button>
                   </ListGroup.Item>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { Dispatch } from 'redux'
+import { ThunkAction } from 'redux-thunk'
 
 import {
   PRODUCT_LIST_REQUEST,
@@ -14,10 +14,12 @@ import {
 import { Prod } from '../Types/common'
 import { ProdListAction, ProdDetailAction } from '../Types/reducers'
 
+import { ReducerState } from '../store'
+
 /**
  * Lists all products
  */
-const listProducts = () => async (dispatch: Dispatch<ProdListAction>) => {
+const listProducts = (): ThunkAction<void, ReducerState, unknown, ProdListAction> => async (dispatch) => {
   try {
     dispatch({
       type: PRODUCT_LIST_REQUEST
@@ -41,7 +43,9 @@ const listProducts = () => async (dispatch: Dispatch<ProdListAction>) => {
  * Fetches specific product
  * @param id The product to fetch
  */
-const listProductDetail = (id: string) => async (dispatch: Dispatch<ProdDetailAction>) => {
+const listProductDetail = (id: string): ThunkAction<void, ReducerState, unknown, ProdDetailAction> => async (
+  dispatch
+) => {
   try {
     dispatch({
       type: PRODUCT_DETAIL_REQUEST

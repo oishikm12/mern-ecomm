@@ -8,8 +8,9 @@ import Message from '../Components/Message'
 
 import { listProducts } from '../Actions/productActions'
 
+import { ReducerState } from '../store'
 import { Prod } from '../Types/common'
-import { RootState, ProdListState } from '../Types/reducers'
+import { ProdListState } from '../Types/reducers'
 
 const Home: FC = () => {
   const dispatch = useDispatch()
@@ -19,7 +20,7 @@ const Home: FC = () => {
    * @param state All global states
    * @return List of products
    */
-  const getProductList = (state: RootState): ProdListState => {
+  const getProductList = (state: ReducerState): ProdListState => {
     return state.productList
   }
 

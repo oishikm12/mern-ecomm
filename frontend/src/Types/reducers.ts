@@ -1,10 +1,10 @@
-import { Prod } from './common'
+import { Prod, CartItem } from './common'
 
 export interface ProdListAction {
   /** Type of dispatch action */
   type: string
   /** Result from request */
-  payload?: Prod[] | Error
+  payload?: Prod[] | string
 }
 
 export interface ProdListState {
@@ -13,14 +13,14 @@ export interface ProdListState {
   /** Products from request */
   products?: Prod[]
   /** Error that may have occured */
-  error?: Error
+  error?: string
 }
 
 export interface ProdDetailAction {
   /** Type of dispatch action */
   type: string
   /** Result from request */
-  payload?: Prod | Error
+  payload?: Prod | string
 }
 
 export interface ProdDetailState {
@@ -29,12 +29,19 @@ export interface ProdDetailState {
   /** Product from request */
   product?: Prod
   /** Error that may have occured */
-  error?: Error
+  error?: string
 }
 
-export interface RootState {
-  /** Product Interface */
-  productList: ProdListState
-  /** Single product */
-  productDetail: ProdDetailState
+export interface CartAction {
+  /** Type of dispatch action */
+  type: string
+  /** Result from request */
+  payload?: CartItem | string
+}
+
+export interface CartState {
+  /** List of items */
+  cartItems: CartItem[]
+  /** Error that may have occured */
+  error?: string
 }

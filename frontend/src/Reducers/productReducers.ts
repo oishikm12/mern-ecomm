@@ -22,7 +22,7 @@ const productListReducer = (state: ProdListState = initialListState, action: Pro
     case PRODUCT_LIST_SUCCESS:
       return { loading: false, products: action.payload as Prod[] }
     case PRODUCT_LIST_FAILURE:
-      return { loading: false, error: action.payload as Error }
+      return { loading: false, error: action.payload as string }
     default:
       return state
   }
@@ -45,7 +45,7 @@ const productDetailReducer = (
     case PRODUCT_DETAIL_SUCCESS:
       return { loading: false, product: action.payload as Prod }
     case PRODUCT_DETAIL_FAILURE:
-      return { loading: false, error: action.payload as Error }
+      return { loading: false, error: action.payload as string }
     default:
       return state
   }
