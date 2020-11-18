@@ -15,6 +15,11 @@ const initialListState: ProdListState = {
   products: []
 }
 
+/**
+ * Performs an action on product list
+ * @param state State of Product list
+ * @param action Action to perform
+ */
 const productListReducer = (state: ProdListState = initialListState, action: ProdListAction): ProdListState => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
@@ -35,6 +40,11 @@ const initialDetailState: ProdDetailState = {
   }
 }
 
+/**
+ * Performs an action on product details
+ * @param state State of product detail
+ * @param action Action to perform
+ */
 const productDetailReducer = (
   state: ProdDetailState = initialDetailState,
   action: ProdDetailAction

@@ -7,6 +7,11 @@ const initialState: CartState = {
   cartItems: []
 }
 
+/**
+ * Performs an action on cart state
+ * @param state Current State of cart
+ * @param action What to do to cart
+ */
 const cartReducer = (state: CartState = initialState, action: CartAction): CartState => {
   switch (action.type) {
     case CART_ADD_ITEM:

@@ -1,4 +1,4 @@
-import { Prod, CartItem } from './common'
+import { Prod, CartItem, Usr } from './common'
 
 export interface ProdListAction {
   /** Type of dispatch action */
@@ -44,4 +44,27 @@ export interface CartState {
   cartItems: CartItem[]
   /** Error that may have occured */
   error?: string
+}
+
+export interface UserState {
+  /** State of request */
+  loading?: boolean
+  /** User from login */
+  userInfo?: Usr
+  /** Error that may have occured */
+  error?: string
+}
+
+export interface UserAction {
+  /** Type of dispatch action */
+  type: string
+  /** Result from request */
+  payload?: Usr | string
+}
+
+export interface InitialState {
+  /** Cart Contents of user */
+  cart: CartState
+  /** Login data of user */
+  userLogin: UserState
 }

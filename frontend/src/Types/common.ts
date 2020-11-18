@@ -48,3 +48,16 @@ export interface CartItem {
   /** Quantity of item */
   qty?: number
 }
+
+export interface Usr {
+  /** Name of user */
+  name: string
+  /** Email of user */
+  email: string
+  /** Unique user ID */
+  _id: string
+  /** Is the user admin */
+  isAdmin: boolean
+  /** JWT Token */
+  token: string
+}
