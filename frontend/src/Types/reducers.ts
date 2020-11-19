@@ -62,6 +62,16 @@ export interface UserAction {
   payload?: Usr | string
 }
 
+export interface UserDetailState extends Omit<UserState, 'userInfo'> {
+  /** User data to set / get */
+  user?: Usr
+}
+
+export interface UserUpdateState extends UserState {
+  /** If change was succesfull */
+  success?: boolean
+}
+
 export interface InitialState {
   /** Cart Contents of user */
   cart: CartState

@@ -54,10 +54,12 @@ export interface Usr {
   name: string
   /** Email of user */
   email: string
+  /** Password of user */
+  password?: string
   /** Unique user ID */
   _id: string
   /** Is the user admin */
-  isAdmin: boolean
+  isAdmin?: boolean
   /** JWT Token */
-  token: string
+  token?: string
 }

@@ -85,4 +85,35 @@ const getUserProfile = asyncHandler(async (req: Request, res: Response) => {
   }
 })
 
-export { authUser, getUserProfile, registerUser }
+/**
+ * Changes session user profile data
+ * @route PUT api/users/profile
+ * @access private
+ */
+const updateUserProfile = asyncHandler(async (req: Request, res: Response) => {
+  const user = await User.findById(req.user?._id)
+  const { name, email, password } = req.body as Usr
+
+  if (user) {
+    user.name = name || user.name
+    user.email = email || user.email
+    if (password) {
+      user.password = password
+    }
+
+    const updatedUser = await user.save()
+
+    res.json({
+      _id: updatedUser._id,
+      email: updatedUser.email,
+      name: updatedUser.name,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id)
+    })
+  } else {
+    res.status(401)
+    throw new Error('User not found')
+  }
+})
+
+export { authUser, getUserProfile, registerUser, updateUserProfile }
