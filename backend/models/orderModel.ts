@@ -5,7 +5,7 @@ import { Ord } from '../types/models'
 const orderSchema: Schema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
-    orderItem: [
+    orderItems: [
       {
         name: { type: String, required: true },
         qty: { type: Number, required: true },

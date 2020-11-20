@@ -2,9 +2,15 @@ import axios from 'axios'
 
 import { ThunkAction } from 'redux-thunk'
 
-import { CART_ADD_ITEM, CART_REMOVE_ITEM, CART_ERR } from '../Constants/cartConstants'
+import {
+  CART_ADD_ITEM,
+  CART_REMOVE_ITEM,
+  CART_ERR,
+  CART_SAVE_SHIPPING_ADDRESS,
+  CART_SAVE_PAYMENT_METHOD
+} from '../Constants/cartConstants'
 
-import { CartItem, Prod } from '../Types/common'
+import { Addr, CartItem, Prod } from '../Types/common'
 import { CartAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
@@ -44,6 +50,10 @@ const addToCart = (id: string, qty: number): ThunkAction<void, ReducerState, unk
   }
 }
 
+/**
+ * Removes an item from cart
+ * @param id Unique id of user
+ */
 const removeFromCart = (id: string): ThunkAction<void, ReducerState, unknown, CartAction> => async (
   dispatch,
   getState
@@ -63,4 +73,44 @@ const removeFromCart = (id: string): ThunkAction<void, ReducerState, unknown, Ca
   }
 }
 
-export { addToCart, removeFromCart }
+/**
+ * Saves a shipping address for user
+ * @param data Location of user
+ */
+const saveShippingAddress = (data: Addr): ThunkAction<void, ReducerState, unknown, CartAction> => async (dispatch) => {
+  try {
+    dispatch({
+      type: CART_SAVE_SHIPPING_ADDRESS,
+      payload: data
+    })
+
+    localStorage.setItem('shippingAddress', JSON.stringify(data))
+  } catch (err) {
+    dispatch({
+      type: CART_ERR,
+      payload: err.message
+    })
+  }
+}
+
+/**
+ * Saves a payment method for user
+ * @param data Location of user
+ */
+const savePaymentMethod = (data: string): ThunkAction<void, ReducerState, unknown, CartAction> => async (dispatch) => {
+  try {
+    dispatch({
+      type: CART_SAVE_PAYMENT_METHOD,
+      payload: data
+    })
+
+    localStorage.setItem('paymentMethod', JSON.stringify(data))
+  } catch (err) {
+    dispatch({
+      type: CART_ERR,
+      payload: err.message
+    })
+  }
+}
+
+export { addToCart, removeFromCart, saveShippingAddress, savePaymentMethod }

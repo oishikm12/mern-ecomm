@@ -1,4 +1,4 @@
-import { Prod, CartItem, Usr } from './common'
+import { Prod, CartItem, Usr, Addr, Ord } from './common'
 
 export interface ProdListAction {
   /** Type of dispatch action */
@@ -36,12 +36,16 @@ export interface CartAction {
   /** Type of dispatch action */
   type: string
   /** Result from request */
-  payload?: CartItem | string
+  payload?: CartItem | Addr | string
 }
 
 export interface CartState {
   /** List of items */
   cartItems: CartItem[]
+  /** Address of user */
+  shippingAddress: Addr
+  /** Payment Method */
+  paymentMethod: string
   /** Error that may have occured */
   error?: string
 }
@@ -70,6 +74,24 @@ export interface UserDetailState extends Omit<UserState, 'userInfo'> {
 export interface UserUpdateState extends UserState {
   /** If change was succesfull */
   success?: boolean
+}
+
+export interface OrderState {
+  /** State of request */
+  loading?: boolean
+  /** Wether successful */
+  success?: boolean
+  /** User from login */
+  order?: Ord
+  /** Error that may have occured */
+  error?: string
+}
+
+export interface OrderAction {
+  /** Type of dispatch action */
+  type: string
+  /** Result from request */
+  payload?: Ord | string
 }
 
 export interface InitialState {

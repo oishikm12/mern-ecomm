@@ -86,13 +86,15 @@ interface Ord extends Document {
   /** User placing the order */
   user: Usr['_id']
   /** Item ordered */
-  orderItem: Item[]
+  orderItems: Item[]
   /** Address to ship to */
   shippingAddress: Address
   /** Method to pay */
   paymentMethod: string
   /** Result of payment */
   paymentResult: Payment
+  /** Price of all items */
+  itemsPrice?: number
   /** Tax Imposed */
   taxPrice?: number
   /** Price to ship */

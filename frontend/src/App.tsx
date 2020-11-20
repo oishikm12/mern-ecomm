@@ -11,6 +11,9 @@ import CartScreen from './Screens/CartScreen'
 import LoginScreen from './Screens/LoginScreen'
 import RegisterScreen from './Screens/RegisterScreen'
 import ProfileScreen from './Screens/ProfileScreen'
+import ShippingScreen from './Screens/ShippingScreen'
+import PaymentScreen from './Screens/PaymentScreen'
+import PlaceOrderScreen from './Screens/PlaceOrderScreen'
 
 const App: FC = () => {
   return (
@@ -22,6 +25,9 @@ const App: FC = () => {
           <Route path="/login" component={LoginScreen} />
           <Route path="/register" component={RegisterScreen} />
           <Route path="/profile" component={ProfileScreen} />
+          <Route path="/shipping" component={ShippingScreen} />
+          <Route path="/payment" component={PaymentScreen} />
+          <Route path="/placeorder" component={PlaceOrderScreen} />
           <Route path="/product/:id" component={ProductScreen} />
           <Route path="/cart/:id?" component={CartScreen} />
         </Container>

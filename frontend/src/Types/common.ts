@@ -63,3 +63,56 @@ export interface Usr {
   /** JWT Token */
   token?: string
 }
+
+export interface Addr {
+  /** Local Address */
+  address?: string
+  /** City of user */
+  city?: string
+  /** Country of user */
+  country?: string
+  /** User's PIN code */
+  postalCode?: string
+}
+
+type Payment = {
+  /** Unique Payment ID */
+  id: string
+  /** Current Payment Status */
+  status: string
+  /** Last Updated Time */
+  update_time: string
+  /** Email of receipent */
+  email_address: string
+}
+
+export interface Ord {
+  /** Unique order ID */
+  _id?: string
+  /** User placing the order */
+  user?: Usr['_id']
+  /** Item ordered */
+  orderItems: CartItem[]
+  /** Address to ship to */
+  shippingAddress: Addr
+  /** Method to pay */
+  paymentMethod: string
+  /** Result of payment */
+  paymentResult?: Payment
+  /** Price of all items */
+  itemsPrice?: number
+  /** Tax Imposed */
+  taxPrice?: number
+  /** Price to ship */
+  shippingPrice?: number
+  /** Total amount */
+  totalPrice?: number
+  /** Is success */
+  isPaid?: boolean
+  /** Paid at if success */
+  paidAt?: Date
+  /** Is delivery success */
+  isDelivered?: boolean
+  /** Date of delivery if success */
+  deliveredAt?: Date
+}

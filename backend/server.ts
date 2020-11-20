@@ -4,6 +4,7 @@ import 'colors'
 
 import { default as productRouter } from './routes/productRoutes'
 import { default as userRouter } from './routes/userRoutes'
+import { default as orderRouter } from './routes/orderRoutes'
 
 import { notFound, errHandler } from './middleware/errorMiddleware'
 
@@ -25,6 +26,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/products', productRouter)
 app.use('/api/users', userRouter)
+app.use('/api/orders', orderRouter)
 
 app.use('*', notFound)
 
