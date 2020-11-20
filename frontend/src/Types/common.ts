@@ -75,7 +75,7 @@ export interface Addr {
   postalCode?: string
 }
 
-type Payment = {
+export type Payment = {
   /** Unique Payment ID */
   id: string
   /** Current Payment Status */
@@ -90,7 +90,9 @@ export interface Ord {
   /** Unique order ID */
   _id?: string
   /** User placing the order */
-  user?: Usr['_id']
+  user?: Usr['_id'] | Usr
+  /** Time created on */
+  createdAt?: string
   /** Item ordered */
   orderItems: CartItem[]
   /** Address to ship to */
@@ -110,9 +112,9 @@ export interface Ord {
   /** Is success */
   isPaid?: boolean
   /** Paid at if success */
-  paidAt?: Date
+  paidAt?: string
   /** Is delivery success */
   isDelivered?: boolean
   /** Date of delivery if success */
-  deliveredAt?: Date
+  deliveredAt?: string
 }

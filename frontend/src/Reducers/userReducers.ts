@@ -11,7 +11,8 @@ import {
   USER_DETAILS_FAILURE,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
-  USER_UPDATE_PROFILE_FAILURE
+  USER_UPDATE_PROFILE_FAILURE,
+  USER_DETAILS_RESET
 } from '../Constants/userConstants'
 
 import { UserState, UserAction, UserDetailState, UserUpdateState } from '../Types/reducers'
@@ -70,6 +71,8 @@ const userDetailsReducer = (state: UserDetailState = initialUserState, action: U
       return { loading: false, user: action.payload as Usr }
     case USER_DETAILS_FAILURE:
       return { loading: false, error: action.payload as string }
+    case USER_DETAILS_RESET:
+      return {}
     default:
       return state
   }

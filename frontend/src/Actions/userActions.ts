@@ -13,10 +13,14 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAILURE,
+  USER_DETAILS_RESET,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
-  USER_UPDATE_PROFILE_FAILURE
+  USER_UPDATE_PROFILE_FAILURE,
+  USER_UPDATE_PROFILE_RESET
 } from '../Constants/userConstants'
+
+import { ORDER_LIST_SELF_RESET } from '../Constants/orderConstants'
 
 import { Usr } from '../Types/common'
 import { UserAction } from '../Types/reducers'
@@ -65,6 +69,12 @@ const logout = (): ThunkAction<void, ReducerState, unknown, UserAction> => (disp
   localStorage.removeItem('userInfo')
   dispatch({
     type: USER_LOGOUT
+  })
+  dispatch({
+    type: USER_DETAILS_RESET
+  })
+  dispatch({
+    type: ORDER_LIST_SELF_RESET
   })
 }
 

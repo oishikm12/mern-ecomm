@@ -1,15 +1,19 @@
 import React, { FC, useState, useEffect, FormEvent } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Button, Row, Col, Table } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 
 import { getUserDetails, updateUserProfile } from '../Actions/userActions'
+import { listSelfOrders } from '../Actions/orderActions'
 
 import { ReducerState } from '../store'
-import { UserDetailState, UserState, UserUpdateState } from '../Types/reducers'
+import { OrderListState, UserDetailState, UserState, UserUpdateState } from '../Types/reducers'
 
 const ProfileScreen: FC<RouteComponentProps> = ({ location, history }) => {
   const [name, setName] = useState('')
@@ -56,12 +60,25 @@ const ProfileScreen: FC<RouteComponentProps> = ({ location, history }) => {
   const userUpdateProfile = useSelector(getUserUpdateProfile)
   const { success } = userUpdateProfile
 
+  /**
+   * Determines state
+   * @param state All global states
+   * @return Current user orders
+   */
+  const getOrderListSelf = (state: ReducerState): OrderListState => {
+    return state.orderListSelf
+  }
+
+  const orderListSelf = useSelector(getOrderListSelf)
+  const { loading: loadingOrders, error: errorOrders, orders } = orderListSelf
+
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
     } else {
       if (!user) {
         dispatch(getUserDetails('profile'))
+        dispatch(listSelfOrders())
       } else {
         setName(user.name)
         setEmail(user.email)
@@ -141,6 +158,51 @@ const ProfileScreen: FC<RouteComponentProps> = ({ location, history }) => {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
+        {loadingOrders ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant="danger">{errorOrders}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders &&
+                orders.map((order) => (
+                  <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td>{order.createdAt?.substring(0, 10)}</td>
+                    <td>${order.totalPrice}</td>
+                    <td>
+                      {order.isPaid ? order.paidAt?.substring(0, 10) : <FontAwesomeIcon icon={faTimes} color="red" />}
+                    </td>
+                    <td>
+                      {order.isDelivered ? (
+                        order.deliveredAt?.substring(0, 10)
+                      ) : (
+                        <FontAwesomeIcon icon={faTimes} color="red" />
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`order/${order._id}`}>
+                        <Button className="btn-sm" variant="light">
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        )}
       </Col>
     </Row>
   )

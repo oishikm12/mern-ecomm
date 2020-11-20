@@ -87,11 +87,16 @@ export interface OrderState {
   error?: string
 }
 
+export interface OrderListState extends Omit<OrderState, 'order' | 'success'> {
+  /** List of orders by user */
+  orders?: Ord[]
+}
+
 export interface OrderAction {
   /** Type of dispatch action */
   type: string
   /** Result from request */
-  payload?: Ord | string
+  payload?: Ord | Ord[] | string
 }
 
 export interface InitialState {

@@ -71,7 +71,7 @@ type Address = {
   country: string
 }
 
-type Payment = {
+export type Payment = {
   /** Unique Payment ID */
   id: string
   /** Current Payment Status */
@@ -104,11 +104,11 @@ interface Ord extends Document {
   /** Is success */
   isPaid?: boolean
   /** Paid at if success */
-  paidAt: Date
+  paidAt: string
   /** Is delivery success */
   isDelivered?: boolean
   /** Date of delivery if success */
-  deliveredAt: Date
+  deliveredAt: string
 }
 
 export { Prod, Usr, Ord }
