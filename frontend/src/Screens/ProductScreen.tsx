@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
-import { RouteComponentProps } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { LinkContainer } from 'react-router-bootstrap'
 import { Row, Col, Image, ListGroup, Card, Button, Form } from 'react-bootstrap'
 
 import Rating from '../Components/Rating'
@@ -44,11 +43,9 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) =>
   if (product)
     return (
       <>
-        <LinkContainer to="/">
-          <Button className="my-3" variant="light">
-            Go Back
-          </Button>
-        </LinkContainer>
+        <Link to="/" className="btn btn-light my-3">
+          Go Back
+        </Link>
         {loading ? (
           <Loader />
         ) : error ? (

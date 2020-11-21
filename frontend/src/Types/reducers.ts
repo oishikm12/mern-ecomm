@@ -1,12 +1,5 @@
 import { Prod, CartItem, Usr, Addr, Ord } from './common'
 
-export interface ProdListAction {
-  /** Type of dispatch action */
-  type: string
-  /** Result from request */
-  payload?: Prod[] | string
-}
-
 export interface ProdListState {
   /** State of request */
   loading: boolean
@@ -16,20 +9,21 @@ export interface ProdListState {
   error?: string
 }
 
-export interface ProdDetailAction {
+export interface ProdDetailState extends Omit<ProdListState, 'products'> {
+  /** Product from request */
+  product?: Prod
+}
+
+export interface ProdListAction {
   /** Type of dispatch action */
   type: string
   /** Result from request */
-  payload?: Prod | string
+  payload?: Prod[] | string
 }
 
-export interface ProdDetailState {
-  /** State of request */
-  loading: boolean
-  /** Product from request */
-  product?: Prod
-  /** Error that may have occured */
-  error?: string
+export interface ProdDetailAction extends Omit<ProdListAction, 'payload'> {
+  /** Result from request */
+  payload?: Prod | string
 }
 
 export interface CartAction {
@@ -59,13 +53,6 @@ export interface UserState {
   error?: string
 }
 
-export interface UserAction {
-  /** Type of dispatch action */
-  type: string
-  /** Result from request */
-  payload?: Usr | string
-}
-
 export interface UserDetailState extends Omit<UserState, 'userInfo'> {
   /** User data to set / get */
   user?: Usr
@@ -74,6 +61,28 @@ export interface UserDetailState extends Omit<UserState, 'userInfo'> {
 export interface UserUpdateState extends UserState {
   /** If change was succesfull */
   success?: boolean
+}
+
+export interface UserModifyState extends Omit<UserState, 'userInfo'> {
+  /** If deletion was succesfull */
+  success?: boolean
+}
+
+export interface AllUserState extends Omit<UserState, 'userInfo'> {
+  /** List of all users */
+  users?: Usr[]
+}
+
+export interface UserAction {
+  /** Type of dispatch action */
+  type: string
+  /** Result from request */
+  payload?: Usr | string
+}
+
+export interface AllUserAction extends Omit<UserAction, 'payload'> {
+  /** All users */
+  payload?: Usr[] | string
 }
 
 export interface OrderState {
@@ -96,7 +105,12 @@ export interface OrderAction {
   /** Type of dispatch action */
   type: string
   /** Result from request */
-  payload?: Ord | Ord[] | string
+  payload?: Ord | string
+}
+
+export interface OrderSelfAction extends Omit<OrderAction, 'payload'> {
+  /** All user orders */
+  payload?: Ord[] | string
 }
 
 export interface InitialState {

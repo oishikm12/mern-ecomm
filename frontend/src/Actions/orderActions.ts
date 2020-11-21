@@ -18,7 +18,7 @@ import {
 } from '../Constants/orderConstants'
 
 import { Ord, Payment } from '../Types/common'
-import { OrderAction } from '../Types/reducers'
+import { OrderAction, OrderSelfAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
 
@@ -138,7 +138,7 @@ const payOrder = (id: string, paymentResult: Payment): ThunkAction<void, Reducer
 /**
  * Lists all orders
  */
-const listSelfOrders = (): ThunkAction<void, ReducerState, unknown, OrderAction> => async (dispatch, getState) => {
+const listSelfOrders = (): ThunkAction<void, ReducerState, unknown, OrderSelfAction> => async (dispatch, getState) => {
   try {
     dispatch({
       type: ORDER_LIST_SELF_REQUEST

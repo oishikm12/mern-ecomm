@@ -15,7 +15,7 @@ import {
   ORDER_LIST_SELF_RESET
 } from '../Constants/orderConstants'
 
-import { OrderState, OrderAction, OrderListState } from '../Types/reducers'
+import { OrderState, OrderAction, OrderListState, OrderSelfAction } from '../Types/reducers'
 import { Ord } from '../Types/common'
 
 const initialOrderState: OrderState = {}
@@ -121,7 +121,10 @@ const initialOrderListState: OrderListState = {
  * @param state Current State of order list
  * @param action Status of list
  */
-const orderListSelfReducer = (state: OrderListState = initialOrderListState, action: OrderAction): OrderListState => {
+const orderListSelfReducer = (
+  state: OrderListState = initialOrderListState,
+  action: OrderSelfAction
+): OrderListState => {
   switch (action.type) {
     case ORDER_LIST_SELF_REQUEST:
       return {

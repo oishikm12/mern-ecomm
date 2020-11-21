@@ -17,13 +17,22 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAILURE,
-  USER_UPDATE_PROFILE_RESET
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAILURE,
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAILURE,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAILURE
 } from '../Constants/userConstants'
 
 import { ORDER_LIST_SELF_RESET } from '../Constants/orderConstants'
 
 import { Usr } from '../Types/common'
-import { UserAction } from '../Types/reducers'
+import { AllUserAction, UserAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
 
@@ -72,6 +81,9 @@ const logout = (): ThunkAction<void, ReducerState, unknown, UserAction> => (disp
   })
   dispatch({
     type: USER_DETAILS_RESET
+  })
+  dispatch({
+    type: USER_LIST_RESET
   })
   dispatch({
     type: ORDER_LIST_SELF_RESET
@@ -197,4 +209,109 @@ const updateUserProfile = (user: Usr): ThunkAction<void, ReducerState, unknown, 
   }
 }
 
-export { login, logout, register, getUserDetails, updateUserProfile }
+/**
+ * Lists all Users
+ */
+const listUsers = (): ThunkAction<void, ReducerState, unknown, AllUserAction> => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_LIST_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo?.token}`
+      }
+    }
+
+    const { data }: { data: Usr[] } = await axios.get(`/api/users`, config)
+
+    dispatch({
+      type: USER_LIST_SUCCESS,
+      payload: data
+    })
+  } catch (err) {
+    dispatch({
+      type: USER_LIST_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+/**
+ * Deletes a user
+ * @param id Unique ID of user
+ */
+const deleteUser = (id: string): ThunkAction<void, ReducerState, unknown, UserAction> => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_DELETE_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo?.token}`
+      }
+    }
+
+    await axios.delete(`/api/users/${id}`, config)
+
+    dispatch({
+      type: USER_DELETE_SUCCESS
+    })
+  } catch (err) {
+    dispatch({
+      type: USER_DELETE_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+/**
+ * Updates a user
+ * @param user Unique user data
+ */
+const updateUser = (user: Usr): ThunkAction<void, ReducerState, unknown, UserAction> => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo?.token}`
+      }
+    }
+
+    const { data }: { data: Usr } = await axios.put(`/api/users/${user._id}`, user, config)
+
+    dispatch({
+      type: USER_UPDATE_SUCCESS
+    })
+
+    dispatch({
+      type: USER_DETAILS_SUCCESS,
+      payload: data
+    })
+  } catch (err) {
+    dispatch({
+      type: USER_UPDATE_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+export { login, logout, register, getUserDetails, updateUserProfile, listUsers, deleteUser, updateUser }

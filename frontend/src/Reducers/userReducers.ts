@@ -12,10 +12,29 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAILURE,
-  USER_DETAILS_RESET
+  USER_DETAILS_RESET,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAILURE,
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAILURE,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAILURE,
+  USER_UPDATE_RESET
 } from '../Constants/userConstants'
 
-import { UserState, UserAction, UserDetailState, UserUpdateState } from '../Types/reducers'
+import {
+  UserState,
+  UserAction,
+  UserDetailState,
+  UserUpdateState,
+  AllUserState,
+  AllUserAction,
+  UserModifyState
+} from '../Types/reducers'
 import { Usr } from '../Types/common'
 
 const initialUserState: UserState = {}
@@ -96,4 +115,70 @@ const userUpdateProfileReducer = (state: UserUpdateState = initialUserState, act
   }
 }
 
-export { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer }
+/**
+ * Update user list
+ * @param state State of user lists
+ * @param action Action to perform
+ */
+const userListReducer = (state: AllUserState = initialUserState, action: AllUserAction): AllUserState => {
+  switch (action.type) {
+    case USER_LIST_REQUEST:
+      return { loading: true }
+    case USER_LIST_SUCCESS:
+      return { loading: false, users: action.payload as Usr[] }
+    case USER_LIST_FAILURE:
+      return { loading: false, error: action.payload as string }
+    case USER_LIST_RESET:
+      return { users: [] }
+    default:
+      return state
+  }
+}
+
+/**
+ * Deletes an user
+ * @param state State of deletion
+ * @param action Action to perform
+ */
+const userDeleteReducer = (state: UserModifyState = initialUserState, action: UserAction): UserModifyState => {
+  switch (action.type) {
+    case USER_DELETE_REQUEST:
+      return { loading: true }
+    case USER_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case USER_DELETE_FAILURE:
+      return { loading: false, error: action.payload as string }
+    default:
+      return state
+  }
+}
+
+/**
+ * Updates an user data
+ * @param state State of user
+ * @param action Action to perform
+ */
+const userUpdateReducer = (state: UserModifyState = initialUserState, action: UserAction): UserModifyState => {
+  switch (action.type) {
+    case USER_UPDATE_REQUEST:
+      return { loading: true }
+    case USER_UPDATE_SUCCESS:
+      return { loading: false, success: true }
+    case USER_UPDATE_FAILURE:
+      return { loading: false, error: action.payload as string }
+    case USER_UPDATE_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+export {
+  userLoginReducer,
+  userRegisterReducer,
+  userDetailsReducer,
+  userUpdateProfileReducer,
+  userListReducer,
+  userDeleteReducer,
+  userUpdateReducer
+}
