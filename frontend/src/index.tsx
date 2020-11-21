@@ -7,7 +7,7 @@ import store from './store'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-import './Styles/bootstrap.min.css'
+import 'bootswatch/dist/lux/bootstrap.min.css'
 import './index.css'
 
 ReactDOM.render(

@@ -33,7 +33,7 @@ import {
   UserUpdateState,
   AllUserState,
   AllUserAction,
-  UserModifyState
+  UniversalState
 } from '../Types/reducers'
 import { Usr } from '../Types/common'
 
@@ -140,7 +140,7 @@ const userListReducer = (state: AllUserState = initialUserState, action: AllUser
  * @param state State of deletion
  * @param action Action to perform
  */
-const userDeleteReducer = (state: UserModifyState = initialUserState, action: UserAction): UserModifyState => {
+const userDeleteReducer = (state: UniversalState = initialUserState, action: UserAction): UniversalState => {
   switch (action.type) {
     case USER_DELETE_REQUEST:
       return { loading: true }
@@ -158,7 +158,7 @@ const userDeleteReducer = (state: UserModifyState = initialUserState, action: Us
  * @param state State of user
  * @param action Action to perform
  */
-const userUpdateReducer = (state: UserModifyState = initialUserState, action: UserAction): UserModifyState => {
+const userUpdateReducer = (state: UniversalState = initialUserState, action: UserAction): UniversalState => {
   switch (action.type) {
     case USER_UPDATE_REQUEST:
       return { loading: true }

@@ -12,7 +12,7 @@ import { getUserDetails, updateUser } from '../Actions/userActions'
 import { USER_UPDATE_RESET } from '../Constants/userConstants'
 
 import { ReducerState } from '../store'
-import { UserModifyState, UserDetailState } from '../Types/reducers'
+import { UniversalState, UserDetailState } from '../Types/reducers'
 
 const UserEditScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) => {
   const userId = match.params.id
@@ -40,7 +40,7 @@ const UserEditScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, histor
    * @param state All global states
    * @return Current user updation
    */
-  const getUserUpdate = (state: ReducerState): UserModifyState => {
+  const getUserUpdate = (state: ReducerState): UniversalState => {
     return state.userUpdate
   }
 

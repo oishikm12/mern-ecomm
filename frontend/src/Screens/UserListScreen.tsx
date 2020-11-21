@@ -12,7 +12,7 @@ import Message from '../Components/Message'
 import { listUsers, deleteUser } from '../Actions/userActions'
 
 import { ReducerState } from '../store'
-import { AllUserState, UserState, UserModifyState } from '../Types/reducers'
+import { AllUserState, UserState, UniversalState } from '../Types/reducers'
 
 const UserListScreen: FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch()
@@ -34,7 +34,7 @@ const UserListScreen: FC<RouteComponentProps> = ({ history }) => {
    * @param state All global states
    * @return Current deletion state
    */
-  const getUserDelete = (state: ReducerState): UserModifyState => {
+  const getUserDelete = (state: ReducerState): UniversalState => {
     return state.userDelete
   }
 

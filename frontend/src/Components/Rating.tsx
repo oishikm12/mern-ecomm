@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faStarHalfAlt, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarEmp } from '@fortawesome/free-regular-svg-icons'
 
-import { Rates, Star } from '../Types/rating'
+import { Rates, Star } from '../Types/common'
 
 const Stars: FC<Star> = ({ index, value, color }) => {
   const icon: IconDefinition = value >= index + 1 ? faStar : value >= index + 0.5 ? faStarHalfAlt : faStarEmp

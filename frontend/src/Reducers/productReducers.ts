@@ -4,10 +4,29 @@ import {
   PRODUCT_LIST_FAILURE,
   PRODUCT_DETAIL_REQUEST,
   PRODUCT_DETAIL_SUCCESS,
-  PRODUCT_DETAIL_FAILURE
+  PRODUCT_DETAIL_FAILURE,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_FAILURE,
+  PRODUCT_DELETE_SUCCESS,
+  PRODUCT_CREATE_REQUEST,
+  PRODUCT_CREATE_FAILURE,
+  PRODUCT_CREATE_SUCCESS,
+  PRODUCT_CREATE_RESET,
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_UPDATE_SUCCESS,
+  PRODUCT_UPDATE_FAILURE,
+  PRODUCT_UPDATE_RESET
 } from '../Constants/productConstants'
 
-import { ProdListState, ProdListAction, ProdDetailState, ProdDetailAction } from '../Types/reducers'
+import {
+  ProdListState,
+  ProdListAction,
+  ProdDetailState,
+  ProdDetailAction,
+  UniversalState,
+  UniversalAction,
+  ProdModifyState
+} from '../Types/reducers'
 import { Prod } from '../Types/common'
 
 const initialListState: ProdListState = {
@@ -61,4 +80,64 @@ const productDetailReducer = (
   }
 }
 
-export { productListReducer, productDetailReducer }
+const intialState: UniversalState = {}
+
+/**
+ * Deletes a product
+ * @param state State of product
+ * @param action Action to perform
+ */
+const productDeleteReducer = (state: UniversalState = intialState, action: UniversalAction): UniversalState => {
+  switch (action.type) {
+    case PRODUCT_DELETE_REQUEST:
+      return { ...state, loading: true }
+    case PRODUCT_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case PRODUCT_DELETE_FAILURE:
+      return { loading: false, error: action.payload as string }
+    default:
+      return state
+  }
+}
+
+/**
+ * Creates a new product
+ * @param state State of product
+ * @param action Action to perform
+ */
+const productCreateReducer = (state: ProdModifyState = intialState, action: ProdDetailAction): ProdModifyState => {
+  switch (action.type) {
+    case PRODUCT_CREATE_REQUEST:
+      return { ...state, loading: true }
+    case PRODUCT_CREATE_SUCCESS:
+      return { loading: false, success: true, product: action.payload as Prod }
+    case PRODUCT_CREATE_FAILURE:
+      return { loading: false, error: action.payload as string }
+    case PRODUCT_CREATE_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+/**
+ * Updates a product
+ * @param state State of product
+ * @param action Action to perform
+ */
+const productUpdateReducer = (state: ProdModifyState = intialState, action: ProdDetailAction): ProdModifyState => {
+  switch (action.type) {
+    case PRODUCT_UPDATE_REQUEST:
+      return { ...state, loading: true }
+    case PRODUCT_UPDATE_SUCCESS:
+      return { loading: false, success: true, product: action.payload as Prod }
+    case PRODUCT_UPDATE_FAILURE:
+      return { loading: false, error: action.payload as string }
+    case PRODUCT_UPDATE_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
+export { productListReducer, productDetailReducer, productDeleteReducer, productCreateReducer, productUpdateReducer }
