@@ -6,6 +6,7 @@ import { Row, Col, Image, ListGroup, Card, Button, Form, FormGroup } from 'react
 import Rating from '../Components/Rating'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
+import Meta from '../Components/Meta'
 
 import { listProductDetail, createProductReview } from '../Actions/productActions'
 
@@ -43,7 +44,11 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) =>
   }
 
   const productReviewCreate = useSelector(Create)
-  const { success: successProductReview, error: errorProductReview } = productReviewCreate
+  const {
+    success: successProductReview,
+    loading: loadingProductReview,
+    error: errorProductReview
+  } = productReviewCreate
 
   /**
    * Determines state
@@ -80,16 +85,16 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) =>
 
   useEffect(() => {
     if (successProductReview) {
-      alert('Review Submitted')
       setRating(0)
       setComment('')
+    }
+    if (!product || !product._id || product._id !== match.params.id) {
+      dispatch(listProductDetail(match.params.id))
       dispatch({
         type: PRODUCT_CREATE_REVIEW_RESET
       })
     }
-
-    dispatch(listProductDetail(match.params.id))
-  }, [dispatch, match, successProductReview])
+  }, [dispatch, match, successProductReview, product])
 
   if (product)
     return (
@@ -103,6 +108,7 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) =>
           <Message variant="danger">{error}</Message>
         ) : (
           <>
+            <Meta title={product.name} />
             <Row>
               <Col md={6}>
                 <Image src={product.image} alt={product.name} fluid />
@@ -188,6 +194,8 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) =>
                   ))}
                   <ListGroup.Item>
                     <h2>Write a customer Review</h2>
+                    {successProductReview && <Message variant="success">Review submitted successfully</Message>}
+                    {loadingProductReview && <Loader />}
                     {errorProductReview && <Message variant="danger">{errorProductReview}</Message>}
                     {userInfo ? (
                       <Form onSubmit={submitHandler}>
@@ -211,7 +219,7 @@ const Product: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) =>
                             onChange={(e) => setComment(e.target.value)}
                           ></Form.Control>
                         </FormGroup>
-                        <Button type="submit" variant="primary">
+                        <Button disabled={loadingProductReview} type="submit" variant="primary">
                           Submit
                         </Button>
                       </Form>

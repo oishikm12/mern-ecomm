@@ -12,6 +12,7 @@ import {
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAILURE,
+  USER_UPDATE_PROFILE_RESET,
   USER_DETAILS_RESET,
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
@@ -72,6 +73,8 @@ const userRegisterReducer = (state: UserState = initialUserState, action: UserAc
       return { loading: false, userInfo: action.payload as Usr }
     case USER_REGISTER_FAILURE:
       return { loading: false, error: action.payload as string }
+    case USER_LOGOUT:
+      return {}
     default:
       return state
   }
@@ -110,6 +113,8 @@ const userUpdateProfileReducer = (state: UserUpdateState = initialUserState, act
       return { loading: false, success: true, userInfo: action.payload as Usr }
     case USER_UPDATE_PROFILE_FAILURE:
       return { loading: false, error: action.payload as string }
+    case USER_UPDATE_PROFILE_RESET:
+      return {}
     default:
       return state
   }

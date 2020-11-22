@@ -3,7 +3,8 @@ import {
   CART_REMOVE_ITEM,
   CART_ERR,
   CART_SAVE_SHIPPING_ADDRESS,
-  CART_SAVE_PAYMENT_METHOD
+  CART_SAVE_PAYMENT_METHOD,
+  CART_CLEAR_ITEMS
 } from '../Constants/cartConstants'
 
 import { CartState, CartAction } from '../Types/reducers'
@@ -53,6 +54,11 @@ const cartReducer = (state: CartState = initialState, action: CartAction): CartS
       return {
         ...state,
         paymentMethod: method
+      }
+    case CART_CLEAR_ITEMS:
+      return {
+        ...state,
+        cartItems: []
       }
     case CART_ERR:
       return {

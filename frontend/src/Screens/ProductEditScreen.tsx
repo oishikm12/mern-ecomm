@@ -60,19 +60,21 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, his
    */
   const submitHandler = (e: FormEvent) => {
     e.preventDefault()
-    dispatch(
-      updateProduct({
-        _id: productId,
-        name,
-        price,
-        brand,
-        category,
-        description,
-        countInStock,
-        image,
-        reviews: []
-      })
-    )
+    if (countInStock >= 0) {
+      dispatch(
+        updateProduct({
+          _id: productId,
+          name,
+          price,
+          brand,
+          category,
+          description,
+          countInStock,
+          image,
+          reviews: []
+        })
+      )
+    }
   }
 
   useEffect(() => {
@@ -189,6 +191,7 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, his
                 value={countInStock}
                 onChange={(e) => setCountInStock(Number(e.target.value))}
               ></Form.Control>
+              {countInStock < 0 && <i style={{ float: 'right', color: 'red' }}>Please enter a valid Stock Count</i>}
             </Form.Group>
             <Form.Group controlId="category">
               <Form.Label>Category</Form.Label>
@@ -208,7 +211,7 @@ const ProductEditScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, his
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" disabled={countInStock < 0}>
               Update
             </Button>
           </Form>

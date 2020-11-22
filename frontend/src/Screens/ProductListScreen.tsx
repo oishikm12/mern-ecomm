@@ -75,7 +75,7 @@ const ProductListScreen: FC<RouteComponentProps<{ pageNumber?: string }>> = ({ h
       type: PRODUCT_CREATE_RESET
     })
 
-    if (userInfo && !userInfo.isAdmin) history.push('/login')
+    if (!userInfo || !userInfo.isAdmin) history.push('/login')
 
     if (successCreate) {
       history.push(`/admin/product/${createdProduct?._id}/edit`)

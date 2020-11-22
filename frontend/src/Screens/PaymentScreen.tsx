@@ -24,7 +24,7 @@ const PaymentScreen: FC<RouteComponentProps> = ({ history }) => {
   const cart = useSelector(getCartItems)
   const { shippingAddress } = cart
 
-  if (!shippingAddress) {
+  if (!shippingAddress.address) {
     history.push('/shipping')
   }
 

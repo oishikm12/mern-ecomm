@@ -22,6 +22,9 @@ import {
   ORDER_DELIVER_SUCCESS,
   ORDER_DELIVER_FAILURE
 } from '../Constants/orderConstants'
+import { CART_CLEAR_ITEMS } from '../Constants/cartConstants'
+
+import { logout } from './userActions'
 
 import { Ord, Payment } from '../Types/common'
 import { OrderAction, OrderListAction } from '../Types/reducers'
@@ -58,10 +61,20 @@ const createOrder = (order: Ord): ThunkAction<void, ReducerState, unknown, Order
       type: ORDER_CREATE_SUCCESS,
       payload: data
     })
+    dispatch({
+      type: CART_CLEAR_ITEMS,
+      payload: data
+    })
+
+    localStorage.removeItem('cartItems')
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: ORDER_CREATE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -96,9 +109,13 @@ const getOrderDetails = (id: string): ThunkAction<void, ReducerState, unknown, O
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: ORDER_DETAILS_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -134,9 +151,13 @@ const payOrder = (id: string, paymentResult: Payment): ThunkAction<void, Reducer
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: ORDER_PAY_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -172,9 +193,13 @@ const deliverOrder = (id: string): ThunkAction<void, ReducerState, unknown, Orde
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: ORDER_DELIVER_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -205,9 +230,13 @@ const listSelfOrders = (): ThunkAction<void, ReducerState, unknown, OrderListAct
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: ORDER_LIST_SELF_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -238,9 +267,13 @@ const listOrders = (): ThunkAction<void, ReducerState, unknown, OrderListAction>
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: ORDER_LIST_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }

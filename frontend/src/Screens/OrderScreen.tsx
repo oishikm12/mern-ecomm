@@ -91,7 +91,7 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, history }
       script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
     }
 
-    if (order?.orderItems.length === 0 || successPay || successDeliver) {
+    if (!order || successPay || successDeliver || order._id !== orderId) {
       dispatch({
         type: ORDER_PAY_RESET
       })

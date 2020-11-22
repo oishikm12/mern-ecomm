@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react'
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row } from 'react-bootstrap'
 
@@ -8,6 +8,7 @@ import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import Paginate from '../Components/Paginate'
 import ProductCarousel from '../Components/ProductCarousel'
+import Meta from '../Components/Meta'
 
 import { listProducts } from '../Actions/productActions'
 
@@ -39,7 +40,14 @@ const Home: FC<RouteComponentProps<{ keyword?: string; pageNumber?: string }>> =
 
   return (
     <>
-      {!keyword && <ProductCarousel />}
+      <Meta />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to="/" className="btn btn-light">
+          Go Back
+        </Link>
+      )}
       <h1>Latest products</h1>
       {loading ? (
         <Loader />

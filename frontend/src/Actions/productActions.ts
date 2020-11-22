@@ -26,6 +26,8 @@ import {
   PRODUCT_TOP_FAILURE
 } from '../Constants/productConstants'
 
+import { logout } from './userActions'
+
 import { Prod, ProdPage, Review } from '../Types/common'
 import { ProdListAction, ProdDetailAction, UniversalAction, ProdTopAction } from '../Types/reducers'
 
@@ -114,9 +116,13 @@ const deleteProduct = (id: string): ThunkAction<void, ReducerState, unknown, Uni
       type: PRODUCT_DELETE_SUCCESS
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: PRODUCT_DELETE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -147,9 +153,13 @@ const createProduct = (): ThunkAction<void, ReducerState, unknown, ProdDetailAct
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: PRODUCT_CREATE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -184,10 +194,18 @@ const updateProduct = (product: Prod): ThunkAction<void, ReducerState, unknown, 
       type: PRODUCT_UPDATE_SUCCESS,
       payload: data
     })
+    dispatch({
+      type: PRODUCT_DETAIL_SUCCESS,
+      payload: data
+    })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: PRODUCT_UPDATE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -223,9 +241,13 @@ const createProductReview = (
       type: PRODUCT_CREATE_REVIEW_SUCCESS
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: PRODUCT_CREATE_REVIEW_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }

@@ -76,6 +76,9 @@ const login = (email: string, password: string): ThunkAction<void, ReducerState,
  */
 const logout = (): ThunkAction<void, ReducerState, unknown, UserAction> => (dispatch) => {
   localStorage.removeItem('userInfo')
+  localStorage.removeItem('cartItems')
+  localStorage.removeItem('shippingAddress')
+  localStorage.removeItem('paymentMethod')
   dispatch({
     type: USER_LOGOUT
   })
@@ -164,9 +167,13 @@ const getUserDetails = (id: string): ThunkAction<void, ReducerState, unknown, Us
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: USER_DETAILS_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -201,10 +208,20 @@ const updateUserProfile = (user: Usr): ThunkAction<void, ReducerState, unknown, 
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data
     })
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data
+    })
+
+    localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: USER_UPDATE_PROFILE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -235,9 +252,13 @@ const listUsers = (): ThunkAction<void, ReducerState, unknown, AllUserAction> =>
       payload: data
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: USER_LIST_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -268,9 +289,13 @@ const deleteUser = (id: string): ThunkAction<void, ReducerState, unknown, UserAc
       type: USER_DELETE_SUCCESS
     })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: USER_DELETE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }
@@ -306,10 +331,17 @@ const updateUser = (user: Usr): ThunkAction<void, ReducerState, unknown, UserAct
       type: USER_DETAILS_SUCCESS,
       payload: data
     })
+    dispatch({
+      type: USER_DETAILS_RESET
+    })
   } catch (err) {
+    const message = err.response && err.response.data.message ? err.response.data.message : err.message
+    if (message.startsWith('Not Authorized')) {
+      dispatch(logout())
+    }
     dispatch({
       type: USER_UPDATE_FAILURE,
-      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+      payload: message
     })
   }
 }

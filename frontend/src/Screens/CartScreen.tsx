@@ -97,7 +97,7 @@ const CartScreen: FC<RouteComponentProps<{ id: string | undefined }>> = ({ match
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>Subtotal ({cartItems.reduce((acc, item) => acc + (item.qty ? item.qty : 0), 0)}) items</h2>${' '}
+              <h2>Subtotal ({cartItems.reduce((acc, item) => acc + (item.qty ? Number(item.qty) : 0), 0)}) items</h2>${' '}
               {cartItems.reduce((acc, item) => acc + (item.qty as number) * (item.price as number), 0).toFixed(2)}
             </ListGroup.Item>
             <ListGroup.Item>

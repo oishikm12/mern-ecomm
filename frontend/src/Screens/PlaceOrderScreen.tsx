@@ -8,6 +8,9 @@ import CheckoutSteps from '../Components/CheckoutSteps'
 
 import { createOrder } from '../Actions/orderActions'
 
+import { ORDER_CREATE_RESET } from '../Constants/orderConstants'
+import { USER_DETAILS_RESET } from '../Constants/userConstants'
+
 import { ReducerState } from '../store'
 import { CartState, OrderState } from '../Types/reducers'
 
@@ -25,6 +28,12 @@ const PlaceOrderScreen: FC<RouteComponentProps> = ({ history }) => {
 
   const cart = useSelector(getCartItems)
   const { shippingAddress, paymentMethod, cartItems } = cart
+
+  if (!shippingAddress.address) {
+    history.push('/shipping')
+  } else if (!paymentMethod) {
+    history.push('/payment')
+  }
 
   /**
    * Adds decimal to number
@@ -54,6 +63,10 @@ const PlaceOrderScreen: FC<RouteComponentProps> = ({ history }) => {
   useEffect(() => {
     if (success) {
       history.push(`/order/${order?._id}`)
+      dispatch({ type: USER_DETAILS_RESET })
+      dispatch({
+        type: ORDER_CREATE_RESET
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, success])
