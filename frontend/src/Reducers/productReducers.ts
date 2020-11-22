@@ -31,7 +31,7 @@ import {
   UniversalAction,
   ProdModifyState
 } from '../Types/reducers'
-import { Prod } from '../Types/common'
+import { Prod, ProdPage } from '../Types/common'
 
 const initialListState: ProdListState = {
   loading: true,
@@ -48,7 +48,12 @@ const productListReducer = (state: ProdListState = initialListState, action: Pro
     case PRODUCT_LIST_REQUEST:
       return { loading: true, products: [] }
     case PRODUCT_LIST_SUCCESS:
-      return { loading: false, products: action.payload as Prod[] }
+      return {
+        loading: false,
+        products: (action.payload as ProdPage).products,
+        pages: (action.payload as ProdPage).pages,
+        page: (action.payload as ProdPage).page
+      }
     case PRODUCT_LIST_FAILURE:
       return { loading: false, error: action.payload as string }
     default:

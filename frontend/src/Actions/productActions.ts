@@ -23,7 +23,7 @@ import {
   PRODUCT_CREATE_REVIEW_FAILURE
 } from '../Constants/productConstants'
 
-import { Prod, Review } from '../Types/common'
+import { Prod, ProdPage, Review } from '../Types/common'
 import { ProdListAction, ProdDetailAction, UniversalAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
@@ -31,16 +31,18 @@ import { ReducerState } from '../store'
 /**
  * Lists all products
  * @param keyword If filtering
+ * @param pageNumber page to load
  */
-const listProducts = (keyword: string = ''): ThunkAction<void, ReducerState, unknown, ProdListAction> => async (
-  dispatch
-) => {
+const listProducts = (
+  keyword: string = '',
+  pageNumber: number = 1
+): ThunkAction<void, ReducerState, unknown, ProdListAction> => async (dispatch) => {
   try {
     dispatch({
       type: PRODUCT_LIST_REQUEST
     })
 
-    const { data }: { data: Prod[] } = await axios.get(`/api/products?keyword=${keyword}`)
+    const { data }: { data: ProdPage } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,

@@ -8,6 +8,7 @@ import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
+import Paginate from '../Components/Paginate'
 
 import { listProducts, deleteProduct, createProduct } from '../Actions/productActions'
 
@@ -16,7 +17,9 @@ import { PRODUCT_CREATE_RESET } from '../Constants/productConstants'
 import { ReducerState } from '../store'
 import { ProdListState, ProdModifyState, UniversalState, UserState } from '../Types/reducers'
 
-const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
+const ProductListScreen: FC<RouteComponentProps<{ pageNumber?: string }>> = ({ history, match }) => {
+  const pageNumber = Number(match.params.pageNumber) || 1
+
   const dispatch = useDispatch()
 
   /**
@@ -29,7 +32,7 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
   }
 
   const productList = useSelector(getProductList)
-  const { loading, error, products } = productList
+  const { loading, error, products, page, pages } = productList
 
   /**
    * Determines state
@@ -77,9 +80,9 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
     if (successCreate) {
       history.push(`/admin/product/${createdProduct?._id}/edit`)
     } else {
-      dispatch(listProducts())
+      dispatch(listProducts('', pageNumber))
     }
-  }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct])
+  }, [dispatch, history, userInfo, successDelete, successCreate, createdProduct, pageNumber])
 
   /**
    * Wipes an user from existance
@@ -119,40 +122,43 @@ const ProductListScreen: FC<RouteComponentProps> = ({ history }) => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Table striped bordered hover responsive className="table-sm">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>PRICE</th>
-              <th>CATEGORY</th>
-              <th>BRAND</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products &&
-              products.map((product) => (
-                <tr key={product._id}>
-                  <td>{product._id}</td>
-                  <td>{product.name}</td>
-                  <td>${product.price}</td>
-                  <td>{product.category}</td>
-                  <td>{product.brand}</td>
-                  <td>
-                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                      <Button variant="light" className="btn-sm">
-                        <FontAwesomeIcon icon={faEdit} />
+        <>
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {products &&
+                products.map((product) => (
+                  <tr key={product._id}>
+                    <td>{product._id}</td>
+                    <td>{product.name}</td>
+                    <td>${product.price}</td>
+                    <td>{product.category}</td>
+                    <td>{product.brand}</td>
+                    <td>
+                      <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                        <Button variant="light" className="btn-sm">
+                          <FontAwesomeIcon icon={faEdit} />
+                        </Button>
+                      </LinkContainer>
+                      <Button variant="danger" className="btn-sm" onClick={() => deleteHandler(product._id as string)}>
+                        <FontAwesomeIcon icon={faTrash} />
                       </Button>
-                    </LinkContainer>
-                    <Button variant="danger" className="btn-sm" onClick={() => deleteHandler(product._id as string)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </Table>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+          <Paginate pages={pages as number} page={page as number} keyword="" isAdmin={true} />
+        </>
       )}
     </>
   )

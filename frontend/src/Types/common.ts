@@ -58,6 +58,15 @@ export interface Prod {
   reviews: Review[]
 }
 
+export interface ProdPage {
+  /** Products available */
+  products?: Prod[]
+  /** Current page */
+  page?: number
+  /** Total Pages */
+  pages?: number
+}
+
 export interface CartItem {
   /** Unique ID of product */
   product?: string

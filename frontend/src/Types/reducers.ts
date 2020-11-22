@@ -1,4 +1,4 @@
-import { Prod, CartItem, Usr, Addr, Ord } from './common'
+import { Prod, ProdPage, CartItem, Usr, Addr, Ord } from './common'
 
 export interface UniversalState {
   /** State of request */
@@ -41,10 +41,7 @@ export interface InitialState {
   userLogin: UserState
 }
 
-export interface ProdListState extends Omit<UniversalState, 'success'> {
-  /** Products from request */
-  products?: Prod[]
-}
+export interface ProdListState extends Omit<UniversalState, 'success'>, ProdPage {}
 
 export interface ProdDetailState extends Omit<UniversalState, 'success'> {
   /** Product from request */
@@ -58,7 +55,7 @@ export interface ProdModifyState extends UniversalState {
 
 export interface ProdListAction extends Omit<UniversalAction, 'payload'> {
   /** Result from request */
-  payload?: Prod[] | string
+  payload?: ProdPage | string
 }
 
 export interface ProdDetailAction extends Omit<UniversalAction, 'payload'> {
