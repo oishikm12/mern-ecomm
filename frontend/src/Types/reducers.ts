@@ -111,7 +111,7 @@ export interface OrderAction extends Omit<UniversalAction, 'payload'> {
   payload?: Ord | string
 }
 
-export interface OrderSelfAction extends Omit<UniversalAction, 'payload'> {
+export interface OrderListAction extends Omit<UniversalAction, 'payload'> {
   /** All user orders */
   payload?: Ord[] | string
 }

@@ -1,22 +1,22 @@
 import React, { FC, useState, useEffect } from 'react'
 import { RouteComponentProps, Link } from 'react-router-dom'
 import { PayPalButton } from 'react-paypal-button-v2'
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 
 import Message from '../Components/Message'
 import Loader from '../Components/Loader'
 
-import { getOrderDetails, payOrder } from '../Actions/orderActions'
+import { getOrderDetails, payOrder, deliverOrder } from '../Actions/orderActions'
 
-import { ORDER_PAY_RESET } from '../Constants/orderConstants'
+import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../Constants/orderConstants'
 
 import { ReducerState } from '../store'
-import { OrderState } from '../Types/reducers'
+import { OrderState, UserState } from '../Types/reducers'
 import { Payment, Usr } from '../Types/common'
 
-const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
+const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match, history }) => {
   const dispatch = useDispatch()
 
   const orderId = match.params.id
@@ -47,7 +47,35 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const orderPay = useSelector(getOrderPay)
   const { loading: loadingPay, success: successPay } = orderPay
 
+  /**
+   * Determines state
+   * @param state All global states
+   * @return Delivery Data
+   */
+  const getOrderDeliver = (state: ReducerState): OrderState => {
+    return state.orderDeliver
+  }
+
+  const orderDeliver = useSelector(getOrderDeliver)
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver
+
+  /**
+   * Determines state
+   * @param state All global states
+   * @return Current user data
+   */
+  const getUserLogin = (state: ReducerState): UserState => {
+    return state.userLogin
+  }
+
+  const userLogin = useSelector(getUserLogin)
+  const { userInfo } = userLogin
+
   useEffect(() => {
+    if (!userInfo) {
+      history.push('/login')
+    }
+
     /**
      * Adds paypal functionality
      */
@@ -63,9 +91,12 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
       script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
     }
 
-    if (order?.orderItems.length === 0 || successPay) {
+    if (order?.orderItems.length === 0 || successPay || successDeliver) {
       dispatch({
         type: ORDER_PAY_RESET
+      })
+      dispatch({
+        type: ORDER_DELIVER_RESET
       })
       dispatch(getOrderDetails(orderId))
     } else if (!order?.isPaid) {
@@ -75,13 +106,20 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, orderId, successPay, order])
+  }, [history, userInfo, dispatch, orderId, successPay, successDeliver, order])
 
   /**
    * Payment handling for paypal
    */
   const successPaymentHandler = (paymentResult: Payment) => {
     dispatch(payOrder(orderId, paymentResult))
+  }
+
+  /**
+   * Delivery handling for admin
+   */
+  const successDeliverHandler = () => {
+    dispatch(deliverOrder(orderId))
   }
 
   return loading ? (
@@ -194,6 +232,14 @@ const OrderScreen: FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
                   ) : (
                     <PayPalButton amount={order?.totalPrice} onSuccess={successPaymentHandler} />
                   )}
+                </ListGroup.Item>
+              )}
+              {loadingDeliver && <Loader />}
+              {userInfo && userInfo.isAdmin && order?.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button type="button" className="btn btn-block" onClick={successDeliverHandler}>
+                    Mark as Delivered
+                  </Button>
                 </ListGroup.Item>
               )}
             </ListGroup>

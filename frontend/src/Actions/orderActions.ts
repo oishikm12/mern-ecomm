@@ -14,11 +14,17 @@ import {
   ORDER_PAY_REQUEST,
   ORDER_LIST_SELF_REQUEST,
   ORDER_LIST_SELF_SUCCESS,
-  ORDER_LIST_SELF_FAILURE
+  ORDER_LIST_SELF_FAILURE,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
+  ORDER_LIST_FAILURE,
+  ORDER_DELIVER_REQUEST,
+  ORDER_DELIVER_SUCCESS,
+  ORDER_DELIVER_FAILURE
 } from '../Constants/orderConstants'
 
 import { Ord, Payment } from '../Types/common'
-import { OrderAction, OrderSelfAction } from '../Types/reducers'
+import { OrderAction, OrderListAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
 
@@ -136,9 +142,47 @@ const payOrder = (id: string, paymentResult: Payment): ThunkAction<void, Reducer
 }
 
 /**
- * Lists all orders
+ * Delivery of an order
+ * @param id Order id to mark for delivery
  */
-const listSelfOrders = (): ThunkAction<void, ReducerState, unknown, OrderSelfAction> => async (dispatch, getState) => {
+const deliverOrder = (id: string): ThunkAction<void, ReducerState, unknown, OrderAction> => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: ORDER_DELIVER_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo?.token}`
+      }
+    }
+
+    const { data }: { data: Ord } = await axios.put(`/api/orders/${id}/deliver`, {}, config)
+
+    dispatch({
+      type: ORDER_DELIVER_SUCCESS,
+      payload: data
+    })
+  } catch (err) {
+    dispatch({
+      type: ORDER_DELIVER_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+/**
+ * Lists all user's orders
+ */
+const listSelfOrders = (): ThunkAction<void, ReducerState, unknown, OrderListAction> => async (dispatch, getState) => {
   try {
     dispatch({
       type: ORDER_LIST_SELF_REQUEST
@@ -168,4 +212,37 @@ const listSelfOrders = (): ThunkAction<void, ReducerState, unknown, OrderSelfAct
   }
 }
 
-export { createOrder, getOrderDetails, payOrder, listSelfOrders }
+/**
+ * Lists all orders
+ */
+const listOrders = (): ThunkAction<void, ReducerState, unknown, OrderListAction> => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ORDER_LIST_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo?.token}`
+      }
+    }
+
+    const { data }: { data: Ord[] } = await axios.get(`/api/orders/`, config)
+
+    dispatch({
+      type: ORDER_LIST_SUCCESS,
+      payload: data
+    })
+  } catch (err) {
+    dispatch({
+      type: ORDER_LIST_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+export { createOrder, getOrderDetails, payOrder, deliverOrder, listSelfOrders, listOrders }

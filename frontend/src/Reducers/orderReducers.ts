@@ -12,10 +12,17 @@ import {
   ORDER_LIST_SELF_FAILURE,
   ORDER_LIST_SELF_SUCCESS,
   ORDER_LIST_SELF_REQUEST,
-  ORDER_LIST_SELF_RESET
+  ORDER_LIST_SELF_RESET,
+  ORDER_LIST_REQUEST,
+  ORDER_LIST_SUCCESS,
+  ORDER_LIST_FAILURE,
+  ORDER_DELIVER_REQUEST,
+  ORDER_DELIVER_SUCCESS,
+  ORDER_DELIVER_FAILURE,
+  ORDER_DELIVER_RESET
 } from '../Constants/orderConstants'
 
-import { OrderState, OrderAction, OrderListState, OrderSelfAction } from '../Types/reducers'
+import { OrderState, OrderAction, OrderListState, OrderListAction } from '../Types/reducers'
 import { Ord } from '../Types/common'
 
 const initialOrderState: OrderState = {}
@@ -112,6 +119,35 @@ const orderPayReducer = (state: OrderState = initialOrderState, action: OrderAct
   }
 }
 
+/**
+ * Performs an action on order delivery state
+ * @param state Current State of order
+ * @param action What to do to order
+ */
+const orderDeliverReducer = (state: OrderState = initialOrderState, action: OrderAction): OrderState => {
+  switch (action.type) {
+    case ORDER_DELIVER_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case ORDER_DELIVER_SUCCESS:
+      return {
+        loading: false,
+        success: true
+      }
+    case ORDER_DELIVER_FAILURE:
+      return {
+        loading: false,
+        error: action.payload as string
+      }
+    case ORDER_DELIVER_RESET:
+      return {}
+    default:
+      return state
+  }
+}
+
 const initialOrderListState: OrderListState = {
   orders: []
 }
@@ -123,7 +159,7 @@ const initialOrderListState: OrderListState = {
  */
 const orderListSelfReducer = (
   state: OrderListState = initialOrderListState,
-  action: OrderSelfAction
+  action: OrderListAction
 ): OrderListState => {
   switch (action.type) {
     case ORDER_LIST_SELF_REQUEST:
@@ -150,4 +186,38 @@ const orderListSelfReducer = (
   }
 }
 
-export { orderCreateReducer, orderDetailsReducer, orderPayReducer, orderListSelfReducer }
+/**
+ * Gets all users's orders
+ * @param state Current State of order list
+ * @param action Status of list
+ */
+const orderListReducer = (state: OrderListState = initialOrderListState, action: OrderListAction): OrderListState => {
+  switch (action.type) {
+    case ORDER_LIST_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case ORDER_LIST_SUCCESS:
+      return {
+        loading: false,
+        orders: action.payload as Ord[]
+      }
+    case ORDER_LIST_FAILURE:
+      return {
+        loading: false,
+        error: action.payload as string
+      }
+    default:
+      return state
+  }
+}
+
+export {
+  orderCreateReducer,
+  orderDetailsReducer,
+  orderPayReducer,
+  orderDeliverReducer,
+  orderListSelfReducer,
+  orderListReducer
+}
