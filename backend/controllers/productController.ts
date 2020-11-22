@@ -11,7 +11,16 @@ import { Prod, Review } from '../types/models'
  * @access public
  */
 const getProducts = asyncHandler(async (req: Request, res: Response) => {
-  const products: Prod[] = await Product.find({})
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword as string,
+          $options: 'i'
+        }
+      }
+    : {}
+
+  const products: Prod[] = await Product.find({ ...keyword })
   res.json(products)
 })
 

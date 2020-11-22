@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row } from 'react-bootstrap'
 
@@ -12,7 +13,9 @@ import { ReducerState } from '../store'
 import { Prod } from '../Types/common'
 import { ProdListState } from '../Types/reducers'
 
-const Home: FC = () => {
+const Home: FC<RouteComponentProps<{ keyword?: string }>> = ({ match }) => {
+  const keyword = match.params.keyword
+
   const dispatch = useDispatch()
 
   /**
@@ -28,8 +31,8 @@ const Home: FC = () => {
   const { loading, error, products } = productList
 
   useEffect(() => {
-    dispatch(listProducts())
-  }, [dispatch])
+    dispatch(listProducts(keyword))
+  }, [dispatch, keyword])
 
   return (
     <>

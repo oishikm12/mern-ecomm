@@ -30,14 +30,17 @@ import { ReducerState } from '../store'
 
 /**
  * Lists all products
+ * @param keyword If filtering
  */
-const listProducts = (): ThunkAction<void, ReducerState, unknown, ProdListAction> => async (dispatch) => {
+const listProducts = (keyword: string = ''): ThunkAction<void, ReducerState, unknown, ProdListAction> => async (
+  dispatch
+) => {
   try {
     dispatch({
       type: PRODUCT_LIST_REQUEST
     })
 
-    const { data }: { data: Prod[] } = await axios.get('/api/products')
+    const { data }: { data: Prod[] } = await axios.get(`/api/products?keyword=${keyword}`)
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
