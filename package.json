@@ -13,9 +13,13 @@
     "server": "nodemon",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "tsc -p .",
+    "start": "node server/server",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc -p .",
+    "build:client": "npm run build --prefix frontend",
     "data:import": "ts-node backend/seeder",
-    "data:destroy": "ts-node backend/seeder -d"
+    "data:destroy": "ts-node backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build"
   },
   "author": "AwEsOmE",
   "license": "MIT",

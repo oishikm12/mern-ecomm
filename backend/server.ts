@@ -28,10 +28,6 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json())
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('API is working')
-})
-
 app.use('/api/products', productRouter)
 app.use('/api/users', userRouter)
 app.use('/api/orders', orderRouter)
@@ -41,12 +37,26 @@ app.get('/api/config/paypal', (req: Request, res: Response) => {
   res.send(process.env.PAYPAL_CLIENT_ID)
 })
 
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')))
 
-app.use('*', notFound)
+  app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
+
+  app.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'))
+  })
+} else {
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
+  app.get('/', (req: Request, res: Response) => {
+    res.send('API is working')
+  })
+}
+
+app.use(notFound)
 
 app.use(errHandler)
 
-const PORT: string | number = process.env.PORT || 8080
+const PORT: string | number = process.env.PORT || 5000
 
 app.listen(PORT, () => console.log(`Server running on ${PORT}`.yellow.bold))
