@@ -13,13 +13,15 @@ interface Usr extends Document {
   matchPassword(arg0: string): Promise<boolean>
 }
 
-type Review = {
+export type Review = {
   /** Reviewer Name */
   name: string
   /** Rating given to product */
   rating: number
   /** Comment on product */
   comment: string
+  /** User who is reviewing */
+  user: Usr['_id']
 }
 
 interface Prod extends Document {

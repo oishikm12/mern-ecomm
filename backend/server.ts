@@ -1,6 +1,7 @@
 import path from 'path'
 
 import express, { Express, Request, Response } from 'express'
+import morgan from 'morgan'
 import dotenv from 'dotenv'
 import 'colors'
 
@@ -20,6 +21,10 @@ const app: Express = express()
 const uri: string = process.env.MONGO_URI || ''
 
 connectDB(uri)
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'))
+}
 
 app.use(express.json())
 

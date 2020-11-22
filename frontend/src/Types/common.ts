@@ -2,7 +2,7 @@ export interface Rates {
   /** Rating provided to us */
   value: number
   /** Review Information */
-  text: string
+  text?: string
   /** Color of stars */
   color?: string
 }
@@ -16,13 +16,19 @@ export interface Star {
   color?: string
 }
 
-interface Review {
+export interface Review {
+  /** Unique Review ID */
+  _id?: string
   /** Reviewer Name */
   name?: string
   /** Rating given to product */
   rating?: number
   /** Comment on product */
   comment?: string
+  /** User who is reviewing */
+  user?: Usr | string
+  /** When this review was generated */
+  createdAt?: string
 }
 
 export interface Prod {

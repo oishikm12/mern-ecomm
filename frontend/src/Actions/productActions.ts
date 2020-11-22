@@ -17,10 +17,13 @@ import {
   PRODUCT_CREATE_FAILURE,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
-  PRODUCT_UPDATE_FAILURE
+  PRODUCT_UPDATE_FAILURE,
+  PRODUCT_CREATE_REVIEW_REQUEST,
+  PRODUCT_CREATE_REVIEW_SUCCESS,
+  PRODUCT_CREATE_REVIEW_FAILURE
 } from '../Constants/productConstants'
 
-import { Prod } from '../Types/common'
+import { Prod, Review } from '../Types/common'
 import { ProdListAction, ProdDetailAction, UniversalAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
@@ -181,4 +184,42 @@ const updateProduct = (product: Prod): ThunkAction<void, ReducerState, unknown, 
   }
 }
 
-export { listProducts, listProductDetail, deleteProduct, createProduct, updateProduct }
+/**
+ * Creates a product review
+ * @param id Product to update
+ * @param review Review to add
+ */
+const createProductReview = (
+  id: string,
+  review: Review
+): ThunkAction<void, ReducerState, unknown, UniversalAction> => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_REQUEST
+    })
+
+    const {
+      userLogin: { userInfo }
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo?.token}`
+      }
+    }
+
+    await axios.post(`/api/products/${id}/reviews`, review, config)
+
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_SUCCESS
+    })
+  } catch (err) {
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+export { listProducts, listProductDetail, deleteProduct, createProduct, updateProduct, createProductReview }
