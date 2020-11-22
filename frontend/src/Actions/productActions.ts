@@ -20,11 +20,14 @@ import {
   PRODUCT_UPDATE_FAILURE,
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
-  PRODUCT_CREATE_REVIEW_FAILURE
+  PRODUCT_CREATE_REVIEW_FAILURE,
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
+  PRODUCT_TOP_FAILURE
 } from '../Constants/productConstants'
 
 import { Prod, ProdPage, Review } from '../Types/common'
-import { ProdListAction, ProdDetailAction, UniversalAction } from '../Types/reducers'
+import { ProdListAction, ProdDetailAction, UniversalAction, ProdTopAction } from '../Types/reducers'
 
 import { ReducerState } from '../store'
 
@@ -227,4 +230,35 @@ const createProductReview = (
   }
 }
 
-export { listProducts, listProductDetail, deleteProduct, createProduct, updateProduct, createProductReview }
+/**
+ * Lists top rated products
+ */
+const listTopProducts = (): ThunkAction<void, ReducerState, unknown, ProdTopAction> => async (dispatch) => {
+  try {
+    dispatch({
+      type: PRODUCT_TOP_REQUEST
+    })
+
+    const { data }: { data: Prod[] } = await axios.get(`/api/products/top`)
+
+    dispatch({
+      type: PRODUCT_TOP_SUCCESS,
+      payload: data
+    })
+  } catch (err) {
+    dispatch({
+      type: PRODUCT_TOP_FAILURE,
+      payload: err.response && err.response.data.message ? err.response.data.message : err.message
+    })
+  }
+}
+
+export {
+  listProducts,
+  listProductDetail,
+  deleteProduct,
+  createProduct,
+  updateProduct,
+  createProductReview,
+  listTopProducts
+}

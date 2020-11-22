@@ -7,6 +7,7 @@ import Product from '../Components/Product'
 import Loader from '../Components/Loader'
 import Message from '../Components/Message'
 import Paginate from '../Components/Paginate'
+import ProductCarousel from '../Components/ProductCarousel'
 
 import { listProducts } from '../Actions/productActions'
 
@@ -38,6 +39,7 @@ const Home: FC<RouteComponentProps<{ keyword?: string; pageNumber?: string }>> =
 
   return (
     <>
+      {!keyword && <ProductCarousel />}
       <h1>Latest products</h1>
       {loading ? (
         <Loader />

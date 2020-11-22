@@ -19,7 +19,10 @@ import {
   PRODUCT_CREATE_REVIEW_REQUEST,
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAILURE,
-  PRODUCT_CREATE_REVIEW_RESET
+  PRODUCT_CREATE_REVIEW_RESET,
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
+  PRODUCT_TOP_FAILURE
 } from '../Constants/productConstants'
 
 import {
@@ -29,7 +32,9 @@ import {
   ProdDetailAction,
   UniversalState,
   UniversalAction,
-  ProdModifyState
+  ProdModifyState,
+  ProdTopState,
+  ProdTopAction
 } from '../Types/reducers'
 import { Prod, ProdPage } from '../Types/common'
 
@@ -169,11 +174,30 @@ const productReviewCreateReducer = (state: UniversalState = intialState, action:
   }
 }
 
+/**
+ * Finds top rated products
+ * @param state State of products
+ * @param action Action to perform
+ */
+const productTopRatedReducer = (state: ProdTopState = intialState, action: ProdTopAction): ProdTopState => {
+  switch (action.type) {
+    case PRODUCT_TOP_REQUEST:
+      return { loading: true, products: [] }
+    case PRODUCT_TOP_SUCCESS:
+      return { loading: false, products: action.payload as Prod[] }
+    case PRODUCT_TOP_FAILURE:
+      return { loading: false, error: action.payload as string }
+    default:
+      return state
+  }
+}
+
 export {
   productListReducer,
   productDetailReducer,
   productDeleteReducer,
   productCreateReducer,
   productUpdateReducer,
-  productReviewCreateReducer
+  productReviewCreateReducer,
+  productTopRatedReducer
 }

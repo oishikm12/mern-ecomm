@@ -43,6 +43,11 @@ export interface InitialState {
 
 export interface ProdListState extends Omit<UniversalState, 'success'>, ProdPage {}
 
+export interface ProdTopState extends Omit<UniversalState, 'success'> {
+  /** Top 3 products */
+  products?: Prod[]
+}
+
 export interface ProdDetailState extends Omit<UniversalState, 'success'> {
   /** Product from request */
   product?: Prod
@@ -56,6 +61,11 @@ export interface ProdModifyState extends UniversalState {
 export interface ProdListAction extends Omit<UniversalAction, 'payload'> {
   /** Result from request */
   payload?: ProdPage | string
+}
+
+export interface ProdTopAction extends Omit<UniversalAction, 'payload'> {
+  /** Result from request */
+  payload?: Prod[] | string
 }
 
 export interface ProdDetailAction extends Omit<UniversalAction, 'payload'> {
